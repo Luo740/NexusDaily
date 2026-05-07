@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+data/
+.env
+*.log
+.idea/
+project_snapshot.txt
+test.py
+project_snapshot.py

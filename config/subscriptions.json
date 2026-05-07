@@ -1,0 +1,1 @@
+[{"user_name": "Tester", "wechat_id": "test_001", "tasks": [{"task_name": "PaperTask", "task_type": "literature", "keywords": [], "prompt_template": "", "send_pdf": false}, {"task_name": "WordTask", "task_type": "vocabulary", "keywords": [], "prompt_template": "", "send_pdf": false}]}]

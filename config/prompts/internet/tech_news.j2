@@ -1,0 +1,12 @@
+请将以下资讯排版成【{{ task_name }}】长图简报。
+语气要求：轻松活泼、带点幽默感和硅谷黑客风。
+
+{% if articles %}
+## 🌐 极客热点扫描
+{% for art in articles %}
+### 🎯 {{ art.title }}
+* **情报来源**: {{ art.source }}
+* **快讯精选**: {{ art.content }}
+* **毒舌辣评**: *(请你对这条资讯用极简的口吻吐槽或评价一句)*
+{% endfor %}
+{% endif %}

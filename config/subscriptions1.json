@@ -1,0 +1,62 @@
+[
+  {
+    "user_name": "Luo",
+    "wechat_id": "LuoQiyun",
+    "tasks": [
+      {
+        "task_name": "AI 前沿文献每日调研",
+        "task_type": "literature",
+        "keywords": ["cat:cs.AI"],
+        "prompt_template": "literature/cs_ai.j2",
+        "send_pdf": false
+      },
+      {
+        "task_name": "极客互联网动态",
+        "task_type": "internet",
+        "keywords": ["v2ex"],
+        "prompt_template": "internet/tech_news.j2",
+        "send_pdf": false
+      }
+    ]
+  },
+
+
+
+
+  {
+    "user_name": "李弘烨",
+    "wechat_id": "ZiFeiWo",
+    "tasks": [
+      {
+        "task_name": "AI 前沿文献每日调研",
+        "task_type": "literature",
+        "keywords": ["cat:cs.AI"],
+        "prompt_template": "literature/cs_ai.j2",
+        "send_pdf": false
+      }
+    ]
+  },
+
+
+
+
+  {
+    "user_name": "颖",
+    "wechat_id": "TuDouMao",
+    "tasks": [
+      {
+        "task_name": "凝聚态与拓扑磁学前沿",
+        "task_type": "literature",
+        "keywords": [
+          "all:\"non-coplanar antiferromagnet\"",
+          "all:\"non-collinear antiferromagnet\"",
+          "all:\"topological magneto-optic\"",
+          "all:altermagnetism",
+          "all:skyrmion"
+        ],
+        "prompt_template": "literature/cond_mat.j2",
+        "send_pdf": false
+      }
+    ]
+  }
+]
