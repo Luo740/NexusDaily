@@ -1,1 +1,50 @@
-[{"user_name": "Tester", "wechat_id": "test_001", "tasks": [{"task_name": "PaperTask", "task_type": "literature", "keywords": [], "prompt_template": "", "send_pdf": false}, {"task_name": "WordTask", "task_type": "vocabulary", "keywords": [], "prompt_template": "", "send_pdf": false}]}]
+[
+  {
+    "user_name": "Luo",
+    "wechat_id": "LuoQiyun",
+    "tasks": [
+      {
+        "task_name": "每日英语单词",
+        "task_type": "vocabulary",
+        "keywords": [],
+        "prompt_template": "",
+        "send_pdf": false,
+        "scene_theme": "random"
+      },
+      {
+        "task_name": "AI 前沿文献调研",
+        "task_type": "literature",
+        "keywords": ["cat:cs.AI", "cat:cs.CL"],
+        "prompt_template": "literature/skim.j2",
+        "send_pdf": false,
+        "reading_mode": "skim",
+        "paper_sources": ["arxiv"],
+        "max_papers": 4
+      }
+    ]
+  },
+  {
+    "user_name": "颖",
+    "wechat_id": "TuDouMao",
+    "tasks": [
+      {
+        "task_name": "凝聚态与拓扑磁学前沿",
+        "task_type": "literature",
+        "keywords": [
+          "all:\"non-coplanar antiferromagnet\"",
+          "all:\"non-collinear antiferromagnet\"",
+          "all:\"topological magneto-optic\"",
+          "all:altermagnetism",
+          "all:skyrmion",
+          "all:\"topological hall effect\"",
+          "all:\"magneto-optical effect\""
+        ],
+        "prompt_template": "literature/hy.j2",
+        "send_pdf": false,
+        "reading_mode": "deep",
+        "paper_sources": ["arxiv"],
+        "max_papers": 2
+      }
+    ]
+  }
+]

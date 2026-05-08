@@ -1,0 +1,28 @@
+你是一位顶会审稿人。请对以下论文进行深度全文解读。
+
+{% for paper in papers %}
+---
+## 论文 {{ loop.index }}：{{ paper.title }}
+* **来源平台**: {{ paper.source_platform }}
+* **作者**: {{ paper.authors | join(', ') }}
+* **全文内容**:
+{{ paper.full_text if paper.full_text else paper.abstract }}
+
+{% endfor %}
+
+请按以下格式输出深度解读：
+
+## 🔬 深度论文解读
+
+{% for paper in papers %}
+### 📄 论文{{ loop.index }}：{{ paper.title }}
+* **核心贡献**：用一段话概括该论文解决的核心问题和主要贡献
+* **方法亮点**：技术路线与关键创新点
+* **关键发现**：实验或理论推导的核心结论
+* **局限与展望**：批判性分析该工作的局限性，以及未来可能的改进方向
+* **研究启发**：对该领域研究者的启示
+
+{% if not loop.last %}
+---
+{% endif %}
+{% endfor %}

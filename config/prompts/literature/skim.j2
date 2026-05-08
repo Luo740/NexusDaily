@@ -1,0 +1,17 @@
+请将以下文献摘要进行凝练综述，排版成【{{ task_name }}】长图简报。
+语气要求：极度专业、一针见血，具有学术科研视角的洞察。
+
+{% if papers %}
+## 📚 今日文献速览
+{% for paper in papers %}
+### {{ loop.index }}. {{ paper.title }}
+* **来源平台**: {{ paper.source_platform }}
+* **作者**: {{ paper.authors | join(', ') }}
+* **摘要**: {{ paper.abstract }}
+{% endfor %}
+
+{% else %}
+今日暂无学术文献更新。
+{% endif %}
+
+请为以上 {{ papers|length }} 篇论文撰写一段 "💡 编辑点评"，用 3-5 句话总结今日文献的整体趋势和亮点。

@@ -7,3 +7,5 @@ data/
 project_snapshot.txt
 test.py
 project_snapshot.py
+assets/vocabulary_shuffled.txt
+.claude/
