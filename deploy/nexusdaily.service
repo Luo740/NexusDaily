@@ -1,0 +1,19 @@
+[Unit]
+Description=NexusDaily 每日智能推送系统
+Documentation=https://github.com/Luo740/NexusDaily
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=lqy
+WorkingDirectory=/opt/NexusDaily
+ExecStart=/opt/NexusDaily/.venv/bin/python scripts/main.py
+EnvironmentFile=-/opt/NexusDaily/.env
+StandardOutput=journal
+StandardError=journal
+# 超时保护：30 分钟足够 LLM 处理和图片渲染
+TimeoutStartSec=1800
+
+[Install]
+WantedBy=multi-user.target
