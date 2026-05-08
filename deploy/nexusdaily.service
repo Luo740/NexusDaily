@@ -7,9 +7,9 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 User=lqy
-WorkingDirectory=/opt/NexusDaily
-ExecStart=/opt/NexusDaily/.venv/bin/python scripts/main.py
-EnvironmentFile=-/opt/NexusDaily/.env
+WorkingDirectory=/home/lqy/NexusDaily
+ExecStart=/home/lqy/NexusDaily/.venv/bin/python scripts/main.py
+EnvironmentFile=-/home/lqy/NexusDaily/.env
 StandardOutput=journal
 StandardError=journal
 # 超时保护：30 分钟足够 LLM 处理和图片渲染

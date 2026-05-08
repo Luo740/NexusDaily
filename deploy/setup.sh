@@ -6,7 +6,7 @@
 # ============================================
 set -e
 
-PROJECT_DIR="/opt/NexusDaily"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SERVICE_NAME="nexusdaily"
 
 echo "=== NexusDaily 部署脚本 ==="
