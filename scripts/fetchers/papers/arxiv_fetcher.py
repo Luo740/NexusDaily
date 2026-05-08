@@ -13,7 +13,7 @@ from scripts.fetchers.papers.base import BasePlatformFetcher
 
 logger = logging.getLogger(__name__)
 
-ARXIV_API = "http://export.arxiv.org/api/query"
+ARXIV_API = "https://export.arxiv.org/api/query"
 
 
 class ArxivFetcher(BasePlatformFetcher):
@@ -30,12 +30,27 @@ class ArxivFetcher(BasePlatformFetcher):
         for i, kw in enumerate(keywords):
             if not (kw.startswith("cat:") or kw.startswith("all:")):
                 continue
+            # 每个请求前都延迟（包括第一个），arXiv 限速 ~1 req / 3s
             if i > 0:
-                time.sleep(3.5)  # arXiv 速率限制: 1 req / 3 sec
-            try:
-                papers.extend(self._fetch(kw, max_results, deep_mode))
-            except Exception as e:
-                logger.error(f"arXiv {kw} 抓取失败: {e}")
+                time.sleep(5.0)
+            else:
+                time.sleep(1.0)
+
+            for attempt in range(3):
+                try:
+                    papers.extend(self._fetch(kw, max_results, deep_mode))
+                    break
+                except requests.HTTPError as e:
+                    if e.response is not None and e.response.status_code == 429:
+                        wait = (attempt + 1) * 10
+                        logger.warning(f"arXiv 429 限流，{wait}s 后重试 ({attempt + 1}/3): {kw}")
+                        time.sleep(wait)
+                    else:
+                        logger.error(f"arXiv {kw} 抓取失败: {e}")
+                        break
+                except Exception as e:
+                    logger.error(f"arXiv {kw} 抓取失败: {e}")
+                    break
         return papers
 
     def _fetch(self, search_query: str, max_results: int,
