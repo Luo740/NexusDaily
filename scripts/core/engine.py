@@ -110,11 +110,28 @@ class PipelineEngine:
                     logger.info(f"  [状态] 当前进度游标: {context.progress_cursor}")
 
                     data = fetcher.fetch(context)
+
+                    # 跨日论文去重：过滤已推送过的论文
+                    if task.task_type == "literature" and data.papers:
+                        seen = self.state_manager.get_seen_paper_ids(user.wechat_id)
+                        if seen:
+                            before = len(data.papers)
+                            data.papers = [p for p in data.papers
+                                           if not p.paper_id or p.paper_id not in seen]
+                            removed = before - len(data.papers)
+                            if removed:
+                                logger.info(f"  [去重] 跨日过滤 {removed} 篇已推送论文")
+
                     data = self.clustering_filter.process(data)
                     report = self.processor.process(data, context)
                     success = self.pusher.push(report, context)
 
                     if success:
+                        # 记录已推送论文 ID 用于跨日去重
+                        if task.task_type == "literature":
+                            new_ids = [p.paper_id for p in data.papers if p.paper_id]
+                            if new_ids:
+                                self.state_manager.add_seen_paper_ids(user.wechat_id, new_ids)
                         step = 10 if task.task_type == "vocabulary" else 1
                         self.state_manager.advance_progress(
                             user.wechat_id, step=step, task_type=task.task_type

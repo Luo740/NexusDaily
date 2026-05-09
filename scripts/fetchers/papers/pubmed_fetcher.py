@@ -103,11 +103,13 @@ class PubMedFetcher(BasePlatformFetcher):
                     authors.append(f"{fn} {ln}".strip())
 
             pmid = medline.findtext("PMID", default="")
+            paper_id = f"pubmed:{pmid}" if pmid else None
             pdf_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None
 
             papers.append(PaperDocument(
                 title=title.strip(), abstract=abstract.strip(),
                 authors=authors, pdf_url=pdf_url,
-                source_platform=self.PLATFORM_NAME
+                source_platform=self.PLATFORM_NAME,
+                paper_id=paper_id
             ))
         return papers

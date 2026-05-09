@@ -20,6 +20,17 @@
         "reading_mode": "skim",
         "paper_sources": ["arxiv"],
         "max_papers": 4
+      },
+      {
+        "task_name": "AI 开源项目动态",
+        "task_type": "github",
+        "keywords": [
+          "github:huggingface/transformers",
+          "github:pytorch/pytorch",
+          "github:langchain-ai/langchain"
+        ],
+        "prompt_template": "internet/tech_news.j2",
+        "send_pdf": false
       }
     ]
   },
@@ -43,7 +54,7 @@
         "send_pdf": false,
         "reading_mode": "deep",
         "paper_sources": ["arxiv"],
-        "max_papers": 2
+        "max_papers": 5
       }
     ]
   }

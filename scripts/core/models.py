@@ -54,6 +54,7 @@ class PaperDocument:
     pdf_url: Optional[str] = None
     source_platform: str = "unknown"  # 来源平台标识
     full_text: Optional[str] = None   # 精读模式下的 PDF 全文提取内容
+    paper_id: Optional[str] = None    # 跨日去重唯一标识 (e.g. arxiv:2301.12345)
 
 @dataclass
 class DailyData:

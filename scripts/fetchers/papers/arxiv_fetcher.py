@@ -3,6 +3,7 @@ arXiv 论文抓取器：通过 arXiv API 获取预印本论文
 """
 import os
 import time
+import random
 import logging
 import requests
 import xml.etree.ElementTree as ET
@@ -30,24 +31,36 @@ class ArxivFetcher(BasePlatformFetcher):
         for i, kw in enumerate(keywords):
             if not (kw.startswith("cat:") or kw.startswith("all:")):
                 continue
-            # 每个请求前都延迟（包括第一个），arXiv 限速 ~1 req / 3s
             if i > 0:
-                time.sleep(5.0)
+                time.sleep(random.uniform(3.0, 8.0))
             else:
-                time.sleep(1.0)
+                time.sleep(random.uniform(0.5, 2.0))
 
-            for attempt in range(3):
+            for attempt in range(5):
                 try:
                     papers.extend(self._fetch(kw, max_results, deep_mode))
                     break
                 except requests.HTTPError as e:
                     if e.response is not None and e.response.status_code == 429:
-                        wait = (attempt + 1) * 10
-                        logger.warning(f"arXiv 429 限流，{wait}s 后重试 ({attempt + 1}/3): {kw}")
+                        base_wait = 2 ** attempt
+                        jitter = random.uniform(0, base_wait)
+                        wait = min(base_wait + jitter, 60)
+                        logger.warning(
+                            f"arXiv 429 限流，{wait:.1f}s 后重试 "
+                            f"({attempt + 1}/5): {kw}"
+                        )
                         time.sleep(wait)
                     else:
-                        logger.error(f"arXiv {kw} 抓取失败: {e}")
+                        status = e.response.status_code if e.response is not None else '?'
+                        logger.error(f"arXiv {kw} HTTP {status} 失败: {e}")
                         break
+                except requests.Timeout as e:
+                    wait = min(2 ** attempt + random.uniform(0, 1), 30)
+                    logger.warning(
+                        f"arXiv 超时，{wait:.1f}s 后重试 "
+                        f"({attempt + 1}/5): {kw}"
+                    )
+                    time.sleep(wait)
                 except Exception as e:
                     logger.error(f"arXiv {kw} 抓取失败: {e}")
                     break
@@ -77,9 +90,18 @@ class ArxivFetcher(BasePlatformFetcher):
                         pdf_url = pdf_url.replace('abs', 'pdf') + ".pdf"
                     break
 
+            paper_id = None
+            id_url = entry.findtext('atom:id', namespaces=ns, default='')
+            if '/abs/' in id_url:
+                arxiv_id = id_url.rsplit('/abs/', 1)[-1]
+                if arxiv_id and arxiv_id[-2] == 'v' and arxiv_id[-1].isdigit():
+                    arxiv_id = arxiv_id.rsplit('v', 1)[0]
+                paper_id = f"arxiv:{arxiv_id}"
+
             paper = PaperDocument(
                 title=title, abstract=summary, authors=authors,
-                pdf_url=pdf_url, source_platform=self.PLATFORM_NAME
+                pdf_url=pdf_url, source_platform=self.PLATFORM_NAME,
+                paper_id=paper_id
             )
 
             if deep_mode and pdf_url and papers_dir:

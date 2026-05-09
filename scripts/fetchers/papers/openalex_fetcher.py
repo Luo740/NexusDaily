@@ -61,10 +61,17 @@ class OpenAlexFetcher(BasePlatformFetcher):
             if oa_url:
                 pdf_url = oa_url
 
+            oa_id = item.get("id", "")
+            paper_id = None
+            if oa_id:
+                oa_suffix = oa_id.rsplit("/", 1)[-1] if "/" in oa_id else oa_id
+                paper_id = f"openalex:{oa_suffix}"
+
             papers.append(PaperDocument(
                 title=title, abstract=abstract, authors=authors,
                 pdf_url=pdf_url if pdf_url else None,
-                source_platform=self.PLATFORM_NAME
+                source_platform=self.PLATFORM_NAME,
+                paper_id=paper_id
             ))
         return papers
 

@@ -52,10 +52,19 @@ class COREFetcher(BasePlatformFetcher):
 
             pdf_url = item.get("downloadUrl") or item.get("sourceUrl") or ""
 
+            paper_id = None
+            if item.get("doi"):
+                paper_id = f"doi:{item['doi']}"
+            elif item.get("oai"):
+                paper_id = f"core:{item['oai']}"
+            elif item.get("id"):
+                paper_id = f"core:{item['id']}"
+
             paper = PaperDocument(
                 title=title, abstract=abstract, authors=authors,
                 pdf_url=pdf_url if pdf_url else None,
-                source_platform=self.PLATFORM_NAME
+                source_platform=self.PLATFORM_NAME,
+                paper_id=paper_id
             )
 
             if deep_mode and pdf_url:

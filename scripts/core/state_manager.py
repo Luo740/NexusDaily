@@ -7,6 +7,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+PAPER_HISTORY_KEY = "_paper_history"
+MAX_PAPER_HISTORY_PER_USER = 5000
+
+
 class StateManager:
     def __init__(self, state_dir: str):
         self.state_file_path = os.path.join(state_dir, "progress.json")
@@ -41,3 +45,32 @@ class StateManager:
         except Exception as e:
             logger.error(f"写入进度失败: {e}")
             return -1
+
+    def get_seen_paper_ids(self, wechat_id: str) -> set:
+        try:
+            with open(self.state_file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            ids = data.get(PAPER_HISTORY_KEY, {}).get(wechat_id, [])
+            return set(ids)
+        except Exception as e:
+            logger.error(f"读取论文历史失败: {e}")
+            return set()
+
+    def add_seen_paper_ids(self, wechat_id: str, paper_ids: list):
+        if not paper_ids:
+            return
+        try:
+            with open(self.state_file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if PAPER_HISTORY_KEY not in data:
+                data[PAPER_HISTORY_KEY] = {}
+            if wechat_id not in data[PAPER_HISTORY_KEY]:
+                data[PAPER_HISTORY_KEY][wechat_id] = []
+            existing = data[PAPER_HISTORY_KEY][wechat_id]
+            existing.extend(paper_ids)
+            if len(existing) > MAX_PAPER_HISTORY_PER_USER:
+                data[PAPER_HISTORY_KEY][wechat_id] = existing[-MAX_PAPER_HISTORY_PER_USER:]
+            with open(self.state_file_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.error(f"写入论文历史失败: {e}")

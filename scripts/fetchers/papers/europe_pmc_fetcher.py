@@ -53,13 +53,19 @@ class EuropePMCFetcher(BasePlatformFetcher):
             doi = item.get("doi", "")
             if pmcid:
                 pdf_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+                paper_id = f"pmc:{pmcid}"
             elif pmid:
                 pdf_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+                paper_id = f"pubmed:{pmid}"
             elif doi:
                 pdf_url = f"https://doi.org/{doi}"
+                paper_id = f"doi:{doi}"
+            else:
+                paper_id = None
 
             papers.append(PaperDocument(
                 title=title, abstract=abstract, authors=authors,
-                pdf_url=pdf_url, source_platform=self.PLATFORM_NAME
+                pdf_url=pdf_url, source_platform=self.PLATFORM_NAME,
+                paper_id=paper_id
             ))
         return papers

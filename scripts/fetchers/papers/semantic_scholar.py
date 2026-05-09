@@ -51,9 +51,11 @@ class SemanticScholarFetcher(BasePlatformFetcher):
             abstract = item.get("abstract") or ""
             authors = [a.get("name", "") for a in item.get("authors", [])]
 
-            pdf_url = None
             ext_ids = item.get("externalIds", {})
             arxiv_id = ext_ids.get("ArXiv")
+            doi = ext_ids.get("DOI")
+
+            pdf_url = None
             if arxiv_id:
                 pdf_url = f"https://arxiv.org/pdf/{arxiv_id}.pdf"
             else:
@@ -61,8 +63,17 @@ class SemanticScholarFetcher(BasePlatformFetcher):
                 if url:
                     pdf_url = url
 
+            paper_id = None
+            if arxiv_id:
+                paper_id = f"arxiv:{arxiv_id}"
+            elif doi:
+                paper_id = f"doi:{doi}"
+            elif item.get("paperId"):
+                paper_id = f"s2:{item['paperId']}"
+
             papers.append(PaperDocument(
                 title=title, abstract=abstract, authors=authors,
-                pdf_url=pdf_url, source_platform=self.PLATFORM_NAME
+                pdf_url=pdf_url, source_platform=self.PLATFORM_NAME,
+                paper_id=paper_id
             ))
         return papers
