@@ -37,6 +37,7 @@ class ImageRenderer:
         line_count = md_content.count('\n') + 1
         height = self.PADDING_V + self.TITLE_H + line_count * self.LINE_H
         height = max(height, 400)  # 保底最小高度
+        height = int(height * 1.15)  # 表格/padding 安全余量，防止截断
 
         if height > self.MAX_HEIGHT:
             logger.warning(f"    ⚠️ 图片高度 {height}px 超出安全上限 {self.MAX_HEIGHT}px，移动端可能截断")

@@ -119,7 +119,7 @@ class LLMProcessor(IProcessor):
 **单词**：{word_list}
 
 **要求**：
-1. 对话包含 2-3 个人物，篇幅 4-6 个来回，简洁自然
+1. 对话包含 2 个人物，篇幅 3-4 个来回，简洁有力
 2. 每个目标单词在英文对话中至少出现一次，并用 **粗体** 标记
 3. 中文对话独立成文：用母语者的口语表达，加入语气词（吧、嘛、啦、哦等）、省略、停顿等真实对话特征，不要逐字翻译英文句式
 4. 英文对话同样口语化：使用缩写（gonna、wanna、it's）、省略句、日常用语，避免书面语
@@ -128,12 +128,12 @@ class LLMProcessor(IProcessor):
 [中文对话]
 人物A：早啊，今天看着挺精神的嘛！
 人物B：还行吧，昨晚总算睡了个好觉。
-（以此类推，8-12 行）
+（以此类推，6-8 行）
 
 [英文对话]
 A: Morning! You look pretty fresh today.
 B: Yeah, I guess. Finally got some good sleep last night.
-（以此类推，8-12 行）
+（以此类推，6-8 行）
 
 [单词表]
 | 单词 | 词性 | 中文释义 |
@@ -163,9 +163,9 @@ B: Yeah, I guess. Finally got some good sleep last night.
         img_en_path = os.path.join(ws_dir, "vocab_en.png")
         img_table_path = os.path.join(ws_dir, "vocab_table.png")
 
-        self.image_renderer.render(self._format_dialogue_md(cn_text, "请用英语说出以下内容"), img_cn_path)
+        self.image_renderer.render(self._format_dialogue_md(cn_text, "请用英语说出以下内容"), img_cn_path, font_size=28)
         logger.info(f"    🎨 CN 对话图: {img_cn_path}")
-        self.image_renderer.render(self._format_dialogue_md(en_text, "English Dialogue"), img_en_path)
+        self.image_renderer.render(self._format_dialogue_md(en_text, "English Dialogue"), img_en_path, font_size=28)
         logger.info(f"    🎨 EN 对话图: {img_en_path}")
         self.image_renderer.render(self._format_table_md(table_text), img_table_path)
         logger.info(f"    🎨 单词表图: {img_table_path}")
@@ -347,8 +347,6 @@ B: Yeah, I guess. Finally got some good sleep last night.
             line = line.strip()
             if not line:
                 formatted.append("")
-            elif "：" in line or ":" in line:
-                formatted.append(f"**{line}**")
             else:
                 formatted.append(line)
             formatted.append("")
