@@ -112,31 +112,34 @@ class LLMProcessor(IProcessor):
         logger.info(f"    📝 场景主题: {theme_desc}")
         word_list = ", ".join(words)
 
-        prompt = f"""你是一位资深英语教师。请用以下 10 个英语单词，创作一段在「{theme_desc}」场景下的自然日常对话。
+        prompt = f"""你是一位资深英语教师，擅长创作鲜活、口语化的场景对话。
+
+请用以下 5 个英语单词，创作一段在「{theme_desc}」场景下的自然对话。
 
 **单词**：{word_list}
 
 **要求**：
-1. 对话包含 2-3 个人物，篇幅 6-8 个来回，简洁有力
+1. 对话包含 2-3 个人物，篇幅 4-6 个来回，简洁自然
 2. 每个目标单词在英文对话中至少出现一次，并用 **粗体** 标记
-3. 中文对话是英文的准确翻译，每句一一对应
-4. 输出严格按以下三段格式，用标记行分隔：
+3. 中文对话独立成文：用母语者的口语表达，加入语气词（吧、嘛、啦、哦等）、省略、停顿等真实对话特征，不要逐字翻译英文句式
+4. 英文对话同样口语化：使用缩写（gonna、wanna、it's）、省略句、日常用语，避免书面语
+5. 输出严格按以下三段格式，用标记行分隔：
 
 [中文对话]
-人物A：你好，今天怎么样？
-人物B：还不错，你呢？
-（以此类推，12-16 行）
+人物A：早啊，今天看着挺精神的嘛！
+人物B：还行吧，昨晚总算睡了个好觉。
+（以此类推，8-12 行）
 
 [英文对话]
-A: Hi, how are you today?
-B: Not bad, and you?
-（以此类推，12-16 行）
+A: Morning! You look pretty fresh today.
+B: Yeah, I guess. Finally got some good sleep last night.
+（以此类推，8-12 行）
 
 [单词表]
 | 单词 | 词性 | 中文释义 |
 |------|------|----------|
 | word1 | n. | 释义1 |
-（每个目标单词一行，共 10 行）"""
+（每个目标单词一行，共 5 行）"""
 
         logger.info("    🧠 请求 AI 生成词汇对话...")
         response = self.client.chat.completions.create(
@@ -146,7 +149,7 @@ B: Not bad, and you?
                 {"role": "user", "content": prompt}
             ],
             temperature=0.8,
-            max_tokens=1200
+            max_tokens=800
         )
         content = response.choices[0].message.content
         logger.info("    ✅ AI 生成完成")
