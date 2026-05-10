@@ -3,8 +3,8 @@ Description=NexusDaily 每日定时触发器
 Requires=nexusdaily.service
 
 [Timer]
-# 每天北京时间 08:00 触发（UTC+8 = 00:00 UTC）
-OnCalendar=*-*-* 00:00:00
+# 每天北京时间 08:00 触发
+OnCalendar=*-*-* 08:00:00 Asia/Shanghai
 # 服务器关机期间错过的任务，开机后立即补跑
 Persistent=true
 # 随机延迟最多 5 分钟，避免多台服务器同时请求 API
