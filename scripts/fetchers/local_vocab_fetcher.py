@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class LocalVocabFetcher(IFetcher):
-    DAILY_WORD_COUNT = 10
+    DAILY_WORD_COUNT = 5
 
     def fetch(self, context: RunContext) -> DailyData:
         data = DailyData()
