@@ -132,7 +132,7 @@ class PipelineEngine:
                             new_ids = [p.paper_id for p in data.papers if p.paper_id]
                             if new_ids:
                                 self.state_manager.add_seen_paper_ids(user.wechat_id, new_ids)
-                        step = 10 if task.task_type == "vocabulary" else 1
+                        step = 5 if task.task_type == "vocabulary" else 1
                         self.state_manager.advance_progress(
                             user.wechat_id, step=step, task_type=task.task_type
                         )
